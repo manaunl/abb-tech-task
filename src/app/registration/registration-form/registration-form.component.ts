@@ -1,7 +1,9 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {JsonPipe, NgIf} from '@angular/common';
-import {environment} from '../../../environments/environment';
+import {RegistrationFormStore} from '../data/registration-form.state';
+import {NewUser} from '../model';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
     selector: 'app-registration-form',
@@ -10,16 +12,23 @@ import {environment} from '../../../environments/environment';
     imports: [
         FormsModule,
         NgIf,
-        JsonPipe
+        JsonPipe,
+    ],
+    providers: [
+        RegistrationFormStore
     ],
     templateUrl: './registration-form.component.html',
     styleUrl: './registration-form.component.css'
 })
 export class RegistrationFormComponent {
-    username = signal('');
+    readonly store = inject(RegistrationFormStore);
 
-    constructor() {
-        console.log(environment.API_BASE_URL);
+    updateModel(property: Partial<NewUser>) {
+        this.store.updateUser(property);
+    }
+
+    register(user: NewUser){
+        this.store.register(user);
     }
 
     // usernameNgModel = viewChild<ElementRef>('usernameNgModel')
