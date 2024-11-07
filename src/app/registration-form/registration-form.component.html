@@ -1,0 +1,47 @@
+<fieldset>
+    <div> {{ username() }} </div>
+    <legend>Registration form</legend>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input class="form-control"
+               id="username"
+               name="username"
+               placeholder="Username"
+               type="text"
+               #usernameNgModel="ngModel"
+               [ngModel]="username()"
+               (ngModelChange)="username.set($event)"
+               required
+        >
+        @if (usernameNgModel.invalid && (usernameNgModel.dirty || usernameNgModel.touched)){
+            @if(usernameNgModel.hasError('required')){
+                <div>Username is required.</div>
+            }
+        }
+    </div>
+
+
+<!--    <div>-->
+<!--        <label for='username'>Username</label>-->
+<!--        <input #usernameField-->
+<!--               id='username'-->
+<!--               placeholder="Username"-->
+<!--               type="text"-->
+<!--               [value]="username()"-->
+<!--               (input)="username.set(usernameField.value)"-->
+<!--        />-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <label for='email'>Email</label>-->
+<!--        <input [value]="email()" type="email" id='email' />-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <label for='password'>Password</label>-->
+<!--        <input [value]="password()" type="password" id='password' />-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <label for='fullName'>Full name</label>-->
+<!--        <input [value]="fullName()" id='fullName' />-->
+<!--    </div>-->
+<!--    <div> {{ username() + ',' + email() + ',' + password() + ',' + fullName() }} </div>-->
+</fieldset>
