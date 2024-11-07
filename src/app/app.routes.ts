@@ -1,13 +1,14 @@
 import {Routes} from '@angular/router';
-import {RegistrationFormComponent} from './registration-form/registration-form.component';
 
 export const routes: Routes = [
     {
-        path: 'registration-form',
-        component: RegistrationFormComponent
+        path: '',
+        redirectTo: '/registration-form',
+        pathMatch: 'full',
     },
     {
-        path: '*',
-        redirectTo: 'registration-form',
-    }
+        path: 'registration-form',
+        loadComponent: () =>
+            import('./registration/registration-form/registration-form.component').then((c) => c.RegistrationFormComponent),
+    },
 ];

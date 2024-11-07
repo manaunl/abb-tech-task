@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {JsonPipe, NgIf} from '@angular/common';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-registration-form',
@@ -18,7 +19,7 @@ export class RegistrationFormComponent {
     username = signal('');
 
     constructor() {
-
+        console.log(environment.API_BASE_URL);
     }
 
     // usernameNgModel = viewChild<ElementRef>('usernameNgModel')
