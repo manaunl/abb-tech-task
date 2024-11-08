@@ -1,72 +1,115 @@
-<fieldset>
-    <div> {{ store.isValid() }} </div>
-    <div> {{ store.user.username() }} </div>
-    <div> {{ store.user.password() }} </div>
-    <div> {{ store.isLoading() }} </div>
-    <div> {{ store.response() | json }} </div>
-    <legend>Registration form</legend>
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input class="form-control"
-               id="username"
-               name="username"
-               placeholder="Username"
-               type="text"
-               #usernameNgModel="ngModel"
-               [ngModel]="store.user.username()"
-               (ngModelChange)="updateModel({ username: $event})"
-               required
-        >
-        @if (usernameNgModel.invalid && (usernameNgModel.dirty || usernameNgModel.touched)){
-            @if(usernameNgModel.hasError('required')){
-                <div>Username is required.</div>
-            }
-        }
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input class="form-control"
-               id="password"
-               name="password"
-               placeholder="Password"
-               type="text"
-               #passwordNgModel="ngModel"
-               [ngModel]="store.user.password()"
-               (ngModelChange)="updateModel({ password: $event})"
-               required
-        >
-        @if (passwordNgModel.invalid && (passwordNgModel.dirty || passwordNgModel.touched)){
-            @if(passwordNgModel.hasError('required')){
-                <div>Password is required.</div>
-            }
-        }
-    </div>
-    <div>
-        <button (click)="register(store.user())">Register</button>
+<div> {{ store.isValid() }} </div>
+<div> {{ store.user.username() }} </div>
+<div> {{ store.user.password() }} </div>
+<div> {{ store.isLoading() }} </div>
+<div> {{ store.response() | json }} </div>
+
+<div class="flex min-h-full flex-col px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Registration form</h2>
     </div>
 
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        @if (store.isLoading()) {
+            <abb-loader></abb-loader>
+        } @else if (store.isError()) {
+<!--            <abb-error></abb-error>-->
+        } @else {
+            <form class="space-y-6" (ngSubmit)="registrationForm.form.valid && register(store.user())" #registrationForm="ngForm">
+                <div>
+                    <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+                    <div class="mt-2">
+                        <input class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                               id="username"
+                               name="username"
+                               type="text"
+                               #usernameNgModel="ngModel"
+                               [ngModel]="store.user.username()"
+                               (ngModelChange)="updateModel({ username: $event})"
+                               required
+                        >
+                        @if (usernameNgModel.invalid && (registrationForm.submitted || usernameNgModel.dirty || usernameNgModel.touched)){
+                            @if(usernameNgModel.hasError('required')){
+                                <div class="text-sm">
+                                    <p class="font-semibold text-orange-600">Username is required</p>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
 
-<!--    <div>-->
-<!--        <label for='username'>Username</label>-->
-<!--        <input #usernameField-->
-<!--               id='username'-->
-<!--               placeholder="Username"-->
-<!--               type="text"-->
-<!--               [value]="username()"-->
-<!--               (input)="username.set(usernameField.value)"-->
-<!--        />-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for='email'>Email</label>-->
-<!--        <input [value]="email()" type="email" id='email' />-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for='password'>Password</label>-->
-<!--        <input [value]="password()" type="password" id='password' />-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for='fullName'>Full name</label>-->
-<!--        <input [value]="fullName()" id='fullName' />-->
-<!--    </div>-->
-<!--    <div> {{ username() + ',' + email() + ',' + password() + ',' + fullName() }} </div>-->
-</fieldset>
+                <div>
+                    <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
+                    <div class="mt-2">
+                        <input class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                               id="password"
+                               name="password"
+                               type="password"
+                               #passwordNgModel="ngModel"
+                               [ngModel]="store.user.password()"
+                               (ngModelChange)="updateModel({ password: $event})"
+                               required
+                        >
+                        @if (passwordNgModel.invalid && (registrationForm.submitted || passwordNgModel.dirty || passwordNgModel.touched)){
+                            @if(passwordNgModel.hasError('required')){
+                                <div class="text-sm">
+                                    <p class="font-semibold text-orange-600">Password is required</p>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm/6 font-medium text-gray-900">Email</label>
+                    <div class="mt-2">
+                        <input class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                               id="email"
+                               name="email"
+                               type="email"
+                               #emailNgModel="ngModel"
+                               [ngModel]="store.user.email()"
+                               (ngModelChange)="updateModel({ email: $event})"
+                               required
+                               email
+                        >
+                        @if (emailNgModel.invalid && (registrationForm.submitted || emailNgModel.dirty || emailNgModel.touched)){
+                            @if(emailNgModel.hasError('required')){
+                                <div class="text-sm">
+                                    <p class="font-semibold text-orange-600">Email is required</p>
+                                </div>
+                            }
+                            @if(emailNgModel.hasError('email')){
+                                <div class="text-sm">
+                                    <p class="font-semibold text-orange-600">Please enter a valid email address</p>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <label for="fullName" class="block text-sm/6 font-medium text-gray-900">
+                        Full name (optional)
+                    </label>
+                    <div class="mt-2">
+                        <input class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                               id="fullName"
+                               name="fullName"
+                               type="text"
+                               [ngModel]="store.user.fullName()"
+                               (ngModelChange)="updateModel({ fullName: $event})"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit"
+                            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        Register
+                    </button>
+                </div>
+            </form>
+        }
+    </div>
+</div>

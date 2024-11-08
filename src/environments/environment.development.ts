@@ -1,5 +1,5 @@
 export const environment = {
     name: 'dev',
     production: false,
-    API_BASE_URL: ''
+    API_BASE_URL: 'api'
 }

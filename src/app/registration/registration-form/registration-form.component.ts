@@ -1,24 +1,28 @@
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild, ViewChild} from '@angular/core';
+import {FormsModule, NgForm} from '@angular/forms';
 import {JsonPipe, NgIf} from '@angular/common';
 import {RegistrationFormStore} from '../data/registration-form.state';
 import {NewUser} from '../model';
 import {HttpClient} from '@angular/common/http';
+import {LoaderComponent} from '../../shared/loader/loader.component';
+import {CustomInputComponent} from '../ui/custom-input/custom-input.component';
 
 @Component({
-    selector: 'app-registration-form',
+    selector: 'abb-registration-form',
     standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         FormsModule,
         NgIf,
         JsonPipe,
+        LoaderComponent,
+        CustomInputComponent,
     ],
     providers: [
         RegistrationFormStore
     ],
     templateUrl: './registration-form.component.html',
-    styleUrl: './registration-form.component.css'
+    styleUrl: './registration-form.component.scss'
 })
 export class RegistrationFormComponent {
     readonly store = inject(RegistrationFormStore);
@@ -30,6 +34,7 @@ export class RegistrationFormComponent {
     register(user: NewUser){
         this.store.register(user);
     }
+
 
     // usernameNgModel = viewChild<ElementRef>('usernameNgModel')
     //

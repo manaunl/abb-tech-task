@@ -5,13 +5,18 @@ import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {computed, inject} from '@angular/core';
 import {AuthService} from './auth.service';
 import {delay, pipe, switchMap, tap} from 'rxjs';
+import {LoggerService} from '../../shared/monitoring/logger.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 const initialState: RegistrationFormState = {
     user: {
         username: '',
-        password: ''
+        password: '',
+        email: '',
+        fullName : ''
     },
     isLoading: false,
+    isError: false,
     response: undefined,
 }
 
@@ -20,7 +25,7 @@ export const RegistrationFormStore = signalStore(
     withComputed(({ user }) => ({
         isValid: computed(() => user().username !== '' && user().password !== ''),
     })),
-    withMethods((store, authService = inject(AuthService)) => ({
+    withMethods((store, authService = inject(AuthService), loggerService = inject(LoggerService)) => ({
         updateUser(updates: Partial<NewUser>): void {
             patchState(store, (state) => ({
                 ...state,
@@ -33,13 +38,16 @@ export const RegistrationFormStore = signalStore(
         register: rxMethod<NewUser>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
-                // delay(5000),
+                delay(1000),
                 switchMap((user: NewUser) => {
                     return authService.register(user);
                 }),
                 tapResponse({
-                    next: (response: RegistrationResponse) => patchState(store, { response }),
-                    error: console.error,
+                    next: (response: RegistrationResponse) => patchState(store, { response, isError: false }),
+                    error: (response: HttpErrorResponse) => {
+                        loggerService.error(response);
+                        patchState(store, { response: response.error, isError: true });
+                    },
                     finalize: () => patchState(store, { isLoading: false }),
                 })
             )
