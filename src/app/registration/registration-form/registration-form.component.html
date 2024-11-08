@@ -1,8 +1,6 @@
-<div> {{ store.isValid() }} </div>
-<div> {{ store.user.username() }} </div>
-<div> {{ store.user.password() }} </div>
 <div> {{ store.isLoading() }} </div>
-<div> {{ store.response() | json }} </div>
+<div> {{ store.isError() }} </div>
+<div> {{ store.isSuccess() }} </div>
 
 <div class="flex min-h-full flex-col px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -12,8 +10,18 @@
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         @if (store.isLoading()) {
             <abb-loader></abb-loader>
-        } @else if (store.isError()) {
-<!--            <abb-error></abb-error>-->
+        } @else if (store.isError() || store.isSuccess()) {
+            <div class="text-center">
+                <abb-notification-message
+                    [status]="store.response().status"
+                    [message]="store.response().message"
+                ></abb-notification-message>
+                <div class="py-1.5 text-sm">
+                    <a href="#" (click)="refresh()" class="font-semibold text-indigo-600 hover:text-indigo-500">
+                        {{ store.isSuccess() ? 'Register new user' : 'Try again' }}
+                    </a>
+                </div>
+            </div>
         } @else {
             <form class="space-y-6" (ngSubmit)="registrationForm.form.valid && register(store.user())" #registrationForm="ngForm">
                 <div>
@@ -26,9 +34,9 @@
                                #usernameNgModel="ngModel"
                                [ngModel]="store.user.username()"
                                (ngModelChange)="updateModel({ username: $event})"
-                               required
+
                         >
-                        @if (usernameNgModel.invalid && (registrationForm.submitted || usernameNgModel.dirty || usernameNgModel.touched)){
+                        @if (usernameNgModel.invalid && (registrationForm.submitted || usernameNgModel.touched)){
                             @if(usernameNgModel.hasError('required')){
                                 <div class="text-sm">
                                     <p class="font-semibold text-orange-600">Username is required</p>
@@ -50,7 +58,7 @@
                                (ngModelChange)="updateModel({ password: $event})"
                                required
                         >
-                        @if (passwordNgModel.invalid && (registrationForm.submitted || passwordNgModel.dirty || passwordNgModel.touched)){
+                        @if (passwordNgModel.invalid && (registrationForm.submitted || passwordNgModel.touched)){
                             @if(passwordNgModel.hasError('required')){
                                 <div class="text-sm">
                                     <p class="font-semibold text-orange-600">Password is required</p>
@@ -73,7 +81,7 @@
                                required
                                email
                         >
-                        @if (emailNgModel.invalid && (registrationForm.submitted || emailNgModel.dirty || emailNgModel.touched)){
+                        @if (emailNgModel.invalid && (registrationForm.submitted || emailNgModel.touched)){
                             @if(emailNgModel.hasError('required')){
                                 <div class="text-sm">
                                     <p class="font-semibold text-orange-600">Email is required</p>

@@ -16,14 +16,17 @@ const initialState: RegistrationFormState = {
         fullName : ''
     },
     isLoading: false,
-    isError: false,
-    response: undefined,
+    response: {
+        status: undefined,
+        message: '',
+    },
 }
 
 export const RegistrationFormStore = signalStore(
     withState(initialState),
-    withComputed(({ user }) => ({
-        isValid: computed(() => user().username !== '' && user().password !== ''),
+    withComputed(({ response }) => ({
+        isError: computed(() => response ? response().status === 'error' : false),
+        isSuccess: computed(() => response ? response().status === 'success' : false),
     })),
     withMethods((store, authService = inject(AuthService), loggerService = inject(LoggerService)) => ({
         updateUser(updates: Partial<NewUser>): void {
@@ -39,18 +42,23 @@ export const RegistrationFormStore = signalStore(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
                 delay(1000),
-                switchMap((user: NewUser) => {
-                    return authService.register(user);
-                }),
-                tapResponse({
-                    next: (response: RegistrationResponse) => patchState(store, { response, isError: false }),
-                    error: (response: HttpErrorResponse) => {
-                        loggerService.error(response);
-                        patchState(store, { response: response.error, isError: true });
-                    },
-                    finalize: () => patchState(store, { isLoading: false }),
-                })
+                switchMap((user: NewUser) =>
+                    authService.register(user).pipe(
+                        tap(() => patchState(store, { isLoading: false })),
+                        tapResponse({
+                            next: (response: RegistrationResponse) => patchState(store, { response }),
+                            error: (response: HttpErrorResponse) => {
+                                loggerService.error(response);
+                                patchState(store, { response: response.error, isLoading: false });
+                            },
+                            complete: () => patchState(store, { isLoading: false }),
+                        })
+                    )
+                ),
             )
         ),
+        cleanup(): void {
+            patchState(store, (state) => (initialState))
+        },
     }))
 )

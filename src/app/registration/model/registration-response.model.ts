@@ -1,4 +1,6 @@
+import {status} from './status.type';
+
 export interface RegistrationResponse {
-    status: string;
+    status: status;
     message: string;
 }

@@ -1,11 +1,10 @@
-import {ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild, ViewChild} from '@angular/core';
-import {FormsModule, NgForm} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {JsonPipe, NgIf} from '@angular/common';
 import {RegistrationFormStore} from '../data/registration-form.state';
 import {NewUser} from '../model';
-import {HttpClient} from '@angular/common/http';
 import {LoaderComponent} from '../../shared/loader/loader.component';
-import {CustomInputComponent} from '../ui/custom-input/custom-input.component';
+import {NotificationMessageComponent} from '../ui/notification-message/notification-message.component';
 
 @Component({
     selector: 'abb-registration-form',
@@ -16,7 +15,7 @@ import {CustomInputComponent} from '../ui/custom-input/custom-input.component';
         NgIf,
         JsonPipe,
         LoaderComponent,
-        CustomInputComponent,
+        NotificationMessageComponent,
     ],
     providers: [
         RegistrationFormStore
@@ -35,16 +34,7 @@ export class RegistrationFormComponent {
         this.store.register(user);
     }
 
-
-    // usernameNgModel = viewChild<ElementRef>('usernameNgModel')
-    //
-    // isValid = computed<boolean|null>(() => {
-    //     console.log(this.usernameNgModel());
-    //
-    //     return (this.usernameNgModel()?.nativeElement as NgModel)?.invalid;
-    // })
-    // username = signal<string>('');
-    // password = signal<string>('');
-    // email = signal<string>('');
-    // fullName = signal<string>('');
+    refresh(){
+        this.store.cleanup();
+    }
 }
