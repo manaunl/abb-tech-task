@@ -1,0 +1,27 @@
+{
+    "user": {
+        "username": "myuser",
+        "password": "Password123!",
+        "email": "user@example.com",
+        "invalidEmail": "user.example.com",
+        "fullName": "my user full name"
+    },
+    "responses": {
+        "success": "Registration data received successfully",
+        "error": "Username, password and email are required"
+    },
+    "errorResponse": {
+        "statusCode": 400,
+        "body": {
+            "status": "error",
+            "message": "Username, password and email are required"
+        }
+    },
+    "validations": {
+        "usernameRequired": "Username is required",
+        "passwordRequired": "Password is required",
+        "emailRequired": "Email is required",
+        "fullNameRequired": "Full name is required",
+        "emailValid": "Please enter a valid email address"
+    }
+}
