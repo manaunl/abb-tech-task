@@ -7,8 +7,7 @@ import {RouterOutlet} from '@angular/router';
     imports: [RouterOutlet],
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './app.component.html',
-    styleUrl: './app.component.css'
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
-    title = 'aab-tech-task';
 }

@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {status} from '../../model/status.type';
 import {NgClass} from '@angular/common';
 
@@ -9,7 +9,7 @@ import {NgClass} from '@angular/common';
         NgClass
     ],
   templateUrl: './notification-message.component.html',
-  styleUrl: './notification-message.component.css'
+  styleUrl: './notification-message.component.scss'
 })
 export class NotificationMessageComponent {
     readonly status = input.required<status>();
