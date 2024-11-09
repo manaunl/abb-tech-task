@@ -41,7 +41,7 @@ export const RegistrationFormStore = signalStore(
         register: rxMethod<NewUser>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
-                delay(1000),
+                delay(1000), // left it here to make spinner visible
                 switchMap((user: NewUser) =>
                     authService.register(user).pipe(
                         tap(() => patchState(store, { isLoading: false })),
