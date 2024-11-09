@@ -13,7 +13,7 @@
                     [message]="store.response().message"
                 ></abb-notification-message>
                 <div class="py-1.5 text-sm">
-                    <a href="#" (click)="refresh()" class="font-semibold text-indigo-600 hover:text-indigo-500">
+                    <a (click)="refresh()" class="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer">
                         {{ store.isSuccess() ? 'Register new user' : 'Try again' }}
                     </a>
                 </div>

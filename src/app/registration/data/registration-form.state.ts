@@ -49,7 +49,13 @@ export const RegistrationFormStore = signalStore(
                             next: (response: RegistrationResponse) => patchState(store, { response }),
                             error: (response: HttpErrorResponse) => {
                                 loggerService.error(response);
-                                patchState(store, { response: response.error, isLoading: false });
+                                patchState(store, {
+                                    response: response.error ? response.error : {
+                                        status: 'error',
+                                        message: 'An unexpected error occurred'
+                                    },
+                                    isLoading: false
+                                });
                             },
                             complete: () => patchState(store, { isLoading: false }),
                         })
